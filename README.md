@@ -8,10 +8,10 @@ Extract frames from video with preview, crop, and OCR-based date/time naming.
 ## 下載 Download
 
 **Windows 單檔執行檔 (含 Tesseract OCR)：**
-[video-png.exe](https://github.com/xun73/video-png/releases/download/v1.0.0/video-png.exe)
+[video-png.exe](https://github.com/xun73/video-png/releases/latest/download/video-png.exe)
 
 **示範影片 (Stellarium 木星)：**
-[stellarium.mp4](https://github.com/xun73/video-png/releases/download/v1.0.0/stellarium.mp4)
+[stellarium.mp4](https://github.com/xun73/video-png/releases/latest/download/stellarium.mp4)
 
 > 進入 [Releases](https://github.com/xun73/video-png/releases) 頁面也可找到所有版本。
 
