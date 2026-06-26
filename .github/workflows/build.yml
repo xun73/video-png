@@ -1,0 +1,42 @@
+name: Build EXE
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install opencv-python pillow pytesseract pyinstaller
+
+      - name: Download portable Tesseract
+        run: |
+          curl -L -o tesseract_setup.exe `
+            https://github.com/UB-Mannheim/tesseract/releases/download/v5.5.0.20241111/tesseract-ocr-w64-setup-5.5.0.20241111.exe
+          7z x tesseract_setup.exe -otesseract_portable -y > $null
+          Remove-Item tesseract_setup.exe
+
+      - name: Build with PyInstaller
+        run: |
+          pyinstaller --onefile --windowed `
+            --add-data "tesseract_portable;tesseract_portable" `
+            --name "video-png" `
+            video-png.py
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: video-png-windows
+          path: dist/video-png.exe
