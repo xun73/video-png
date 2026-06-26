@@ -22,11 +22,11 @@ jobs:
           python -m pip install --upgrade pip
           pip install opencv-python pillow pytesseract pyinstaller
 
-      - name: Download portable Tesseract
+      - name: Download and extract Tesseract portable
         run: |
           curl -L -o tesseract_setup.exe `
             https://github.com/UB-Mannheim/tesseract/releases/download/v5.5.0.20241111/tesseract-ocr-w64-setup-5.5.0.20241111.exe
-          7z x tesseract_setup.exe -otesseract_portable -y > $null
+          Start-Process tesseract_setup.exe -ArgumentList '/S','/D=tesseract_portable' -Wait
           Remove-Item tesseract_setup.exe
 
       - name: Build with PyInstaller
