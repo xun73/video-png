@@ -5,6 +5,7 @@ import os
 import random
 import re
 import shutil
+import sys
 import tempfile
 from PIL import Image, ImageTk
 import pytesseract
