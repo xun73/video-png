@@ -1,5 +1,6 @@
 import tkinter as tk
 from tkinter import filedialog, messagebox, ttk
+from collections import Counter
 import cv2
 import os
 import random
@@ -716,8 +717,7 @@ class VideoExtractorApp:
             ('PSM8 一般',   '--psm 8'),
         ]
 
-        best_result = None
-        best_score = -1
+        results = []
         for pname, pimg in preps:
             for cname, cfg in cfgs:
                 text = pytesseract.image_to_string(pimg, lang='eng', config=cfg).strip()
@@ -727,10 +727,12 @@ class VideoExtractorApp:
                     nd = sum(len(n) for n in numbers)
                     nn = len(numbers)
                     score = (100 if nn == 3 else 0) + nd
-                    if score >= best_score:
-                        best_score = score
-                        best_result = result
-        return best_result
+                    results.append((result, score))
+        if not results:
+            return None
+        counter = Counter(r[0] for r in results)
+        return max(set(r[0] for r in results),
+                   key=lambda r: (counter[r], max(s for res, s in results if res == r)))
 
     @staticmethod
     def _parse_date_text(text):
@@ -865,8 +867,7 @@ class VideoExtractorApp:
                     if rows is None:
                         f.write("區域無效\n\n")
                         continue
-                    best_result = None
-                    best_score = -1
+                    scored = []
                     for pname, cname, text, numbers, parsed in rows:
                         f.write(f"=== {pname} + {cname} ===\n")
                         f.write(f"原始: {text or '(空白)'}\n")
@@ -876,9 +877,13 @@ class VideoExtractorApp:
                             nd = sum(len(n) for n in numbers)
                             nn = len(numbers)
                             score = (100 if nn == 3 else 0) + nd
-                            if score >= best_score:
-                                best_score = score
-                                best_result = parsed
+                            scored.append((parsed, score))
+                    if scored:
+                        counter = Counter(r[0] for r in scored)
+                        best_result = max(set(r[0] for r in scored),
+                                          key=lambda r: (counter[r], max(s for res, s in scored if res == r)))
+                    else:
+                        best_result = None
                     f.write(f"最佳: {best_result or '辨識失敗'}\n\n")
 
                 date_result = self._ocr_region_parsed(frame, self.date_roi, self._parse_date_text)
