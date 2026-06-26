@@ -39,3 +39,11 @@ jobs:
         with:
           name: video-png-windows
           path: dist/video-png.exe
+
+      - name: Create Release
+        run: |
+          gh release create "${{ github.ref_name }}" dist/video-png.exe `
+            --title "video-png ${{ github.ref_name }}" `
+            --notes "自動打包，內含 Tesseract OCR，下載解壓後直接執行 video-png.exe。"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
