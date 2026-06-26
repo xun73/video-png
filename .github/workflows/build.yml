@@ -22,17 +22,11 @@ jobs:
           python -m pip install --upgrade pip
           pip install opencv-python pillow pytesseract pyinstaller
 
-      - name: Download and extract Tesseract portable
+      - name: Install Tesseract portable
         run: |
-          $url = "https://github.com/UB-Mannheim/tesseract/releases/download/v5.4.0.20240606/tesseract-ocr-w64-setup-5.4.0.20240606.exe"
-          $out = "tesseract_setup.exe"
-          curl.exe -sL -o $out $url
-          & "C:\Program Files\7-Zip\7z.exe" x $out -otesseract_portable -y | Out-Null
-          if (Test-Path "tesseract_portable/\$INSTDIR") {
-            Move-Item -Path "tesseract_portable/\$INSTDIR\*" -Destination tesseract_portable\ -Force
-            Remove-Item -Recurse -Force "tesseract_portable/\$INSTDIR"
-          }
-          Remove-Item $out
+          choco install tesseract -y --no-progress 2>&1 | Out-Null
+          New-Item -ItemType Directory -Path tesseract_portable -Force
+          Copy-Item -Recurse -Path "$env:ProgramFiles\Tesseract-OCR\*" -Destination tesseract_portable\ -Force
 
       - name: Build with PyInstaller
         run: |
