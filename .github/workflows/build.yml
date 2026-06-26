@@ -24,10 +24,15 @@ jobs:
 
       - name: Download and extract Tesseract portable
         run: |
-          curl -L -o tesseract_setup.exe `
-            https://github.com/UB-Mannheim/tesseract/releases/download/v5.5.0.20241111/tesseract-ocr-w64-setup-5.5.0.20241111.exe
-          Start-Process tesseract_setup.exe -ArgumentList '/S','/D=tesseract_portable' -Wait
-          Remove-Item tesseract_setup.exe
+          $url = "https://github.com/UB-Mannheim/tesseract/releases/download/v5.4.0.20240606/tesseract-ocr-w64-setup-5.4.0.20240606.exe"
+          $out = "tesseract_setup.exe"
+          curl.exe -sL -o $out $url
+          & "C:\Program Files\7-Zip\7z.exe" x $out -otesseract_portable -y | Out-Null
+          if (Test-Path "tesseract_portable/\$INSTDIR") {
+            Move-Item -Path "tesseract_portable/\$INSTDIR\*" -Destination tesseract_portable\ -Force
+            Remove-Item -Recurse -Force "tesseract_portable/\$INSTDIR"
+          }
+          Remove-Item $out
 
       - name: Build with PyInstaller
         run: |
