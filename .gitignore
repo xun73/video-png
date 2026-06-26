@@ -12,3 +12,6 @@ _ocr_debug.txt
 *.exe
 tesseract_portable/tessdata/
 tesseract_portable/*.exe
+video-png2.py
+video-png3.py
+大氣_自製下載氣象雲圖/
