@@ -91,9 +91,10 @@ class VideoExtractorApp:
         tk.Entry(top, textvariable=self.output_folder, width=60).grid(row=1, column=1, padx=5)
         tk.Button(top, text="選擇輸出位置", command=self.browse_folder).grid(row=1, column=2)
 
-        self.video_frame = tk.Frame(root, bg='#f0f0f0')
-        self.video_frame.pack(fill=tk.BOTH, expand=True)
-        self.canvas = tk.Canvas(self.video_frame, bg='#f0f0f0', cursor='cross', highlightthickness=0)
+        self.video_frame = tk.Frame(root, bg='black')
+        self.video_frame.pack(fill=tk.BOTH, expand=True, padx=10, pady=2)
+
+        self.canvas = tk.Canvas(self.video_frame, bg='black', cursor='cross', highlightthickness=0)
         self.canvas.pack(fill=tk.BOTH, expand=True)
 
         ctrl = tk.Frame(root)
